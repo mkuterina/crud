@@ -1,6 +1,7 @@
 package com.easydiet.service.recipe_entry;
 
 import com.easydiet.domain.directory.DirectoryId;
+import com.easydiet.domain.entity_link.EntityLink;
 import com.easydiet.domain.recipe_entry.*;
 import com.sun.istack.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;

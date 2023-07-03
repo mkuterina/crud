@@ -62,7 +62,7 @@ public class RecipeLineService {
 
     public List<RecipeLine> list() {
         return recipeLineRepository.listAll().stream()
-                .filter(RecipeLine -> !RecipeLine.isDeleted())
+                .filter(RecipeLine -> RecipeLine.isDeleted())
                 .toList();
     }
 
@@ -77,7 +77,7 @@ public class RecipeLineService {
 
     public List<RecipeLine> list(String recipeEntryId) {
         return recipeLineRepository.listAllByRecipeEntryId(recipeEntryId).stream()
-                .filter(RecipeLine -> !RecipeLine.isDeleted())
+                .filter(RecipeLine -> RecipeLine.isDeleted())
                 .toList();
     }
 }

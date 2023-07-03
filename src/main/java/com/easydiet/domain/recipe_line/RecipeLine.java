@@ -94,7 +94,7 @@ public class RecipeLine {
             RecipeLineType type) {
 
         if (type == null) {
-            throw new IllegalStateException("Имя ингридиента должно быть задано");
+            throw new IllegalStateException("Тип связи должен быть задан.");
         }
 
         return new RecipeLine(RecipeLineId.create(),
@@ -111,7 +111,7 @@ public class RecipeLine {
     //
 
     public boolean isDeleted() {
-        return deleteDate != null;
+        return deleteDate == null;
     }
 
     public boolean retype(RecipeLineType newType) {
