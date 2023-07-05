@@ -26,12 +26,12 @@ public class DirectoryService {
                 )
         );
     }
-    public boolean rename(String directory_id, String newName, String newType, String newDescription)
+    public boolean rename(String directoryId, String newName, String newType, String newDescription)
             throws DirectoryNotFoundException {
-        Optional<Directory> optionalDirectory = directoryRepository.findByIdentifier(directory_id);
+        Optional<Directory> optionalDirectory = directoryRepository.findByIdentifier(directoryId);
 
         if (optionalDirectory.isEmpty()) {
-            throw new DirectoryNotFoundException(directory_id);
+            throw new DirectoryNotFoundException(directoryId);
         }
         else {
             Directory directory = optionalDirectory.get();
@@ -42,8 +42,8 @@ public class DirectoryService {
             return result;
         }
     }
-    public boolean delete(String directory_id) {
-        Optional<Directory> optionalDirectory = directoryRepository.findByIdentifier(directory_id);
+    public boolean delete(String directoryId) {
+        Optional<Directory> optionalDirectory = directoryRepository.findByIdentifier(directoryId);
         if (optionalDirectory.isEmpty()) {
             return false;
         }
@@ -59,10 +59,10 @@ public class DirectoryService {
                 .filter(directory -> !directory.isDeleted())
                 .toList();
     }
-    public Directory details(String directory_id) throws DirectoryNotFoundException {
-        Optional<Directory> optionalDirectory = directoryRepository.findByIdentifier(directory_id);
+    public Directory details(String directoryId) throws DirectoryNotFoundException {
+        Optional<Directory> optionalDirectory = directoryRepository.findByIdentifier(directoryId);
         if (optionalDirectory.isEmpty()) {
-            throw new DirectoryNotFoundException(directory_id);
+            throw new DirectoryNotFoundException(directoryId);
         }
         else {
             Directory directory = optionalDirectory.get();

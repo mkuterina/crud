@@ -5,13 +5,13 @@ import lombok.Data;
 
 @Data
 public class IngredientEntryBrief {
-    private String directory_id;
+    private String directoryId;
     private String id;
     private String name;
     private String description;
 
-    public IngredientEntryBrief(String directory_id, String id, String name, String description) {
-        this.directory_id = directory_id;
+    public IngredientEntryBrief(String directoryId, String id, String name, String description) {
+        this.directoryId = directoryId;
         this.id = id;
         this.name = name;
         this.description = description;
@@ -19,7 +19,7 @@ public class IngredientEntryBrief {
     }
 
       public static IngredientEntryBrief from(IngredientEntry ingredientEntry) {
-        return new IngredientEntryBrief(ingredientEntry.getDirectory_id(),
+        return new IngredientEntryBrief(ingredientEntry.getDirectoryId(),
                 ingredientEntry.getId().getId(),
                 ingredientEntry.getName().getName(),
                 ingredientEntry.getDescription().getDescription()

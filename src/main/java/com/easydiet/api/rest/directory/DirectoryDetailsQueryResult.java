@@ -11,9 +11,11 @@ import java.time.LocalDateTime;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class DirectoryDetailsQueryResult {
     private String status;
-    private String directory_id;
+    private String directoryId;
+
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime createDate;
+
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime deleteDate;
     private String name;
@@ -25,7 +27,7 @@ public class DirectoryDetailsQueryResult {
         this.status = status;
         this.message = message;
         if (directory != null) {
-            this.directory_id = directory.getDirectory_id();
+            this.directoryId = directory.getDirectoryId();
             this.createDate = directory.getCreateDate();
             this.deleteDate = directory.getDeleteDate();
             this.name = directory.getName();

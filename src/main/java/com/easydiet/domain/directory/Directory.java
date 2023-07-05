@@ -15,7 +15,7 @@ public class Directory {
 
         @Id
         @Column(name = "directory_id")
-        private String directory_id;
+        private String directoryId;
 
         @Column(name = "directory_name")
         private String name;
@@ -23,7 +23,6 @@ public class Directory {
         @Column(name = "directory_type")
         private String type;
 
-        @lombok.Getter
         @Column(name = "directory_description")
         private String description;
 
@@ -39,8 +38,8 @@ public class Directory {
 
       public Directory() {
         }
-    public String getDirectory_id() {
-         return directory_id;
+    public String getDirectoryId() {
+         return directoryId;
     }
 
     public LocalDateTime getCreateDate() {
@@ -66,8 +65,8 @@ public class Directory {
     // IngredientOperations Support
     //
 
-    protected Directory(DirectoryId directory_id, DirectoryName name, DirectoryType type, DirectoryDescription description, LocalDateTime createDate) {
-        this.directory_id = directory_id.getDirectory_id();
+    protected Directory(DirectoryId directoryId, DirectoryName name, DirectoryType type, DirectoryDescription description, LocalDateTime createDate) {
+        this.directoryId = directoryId.getDirectoryId();
         this.name = name.getName();
         this.type = type.getType();
         this.description = description.getDescription();

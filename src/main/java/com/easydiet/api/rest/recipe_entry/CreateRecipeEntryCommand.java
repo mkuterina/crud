@@ -4,7 +4,7 @@ import lombok.Data;
 
 @Data
 public class CreateRecipeEntryCommand {
-    private String directory_id;
+    private String directoryId;
     private String name;
     private String content;
 

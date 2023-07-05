@@ -28,9 +28,9 @@ public class DirectoryController {
     }
 
     @GetMapping(value = "{directory_id}")
-    public DirectoryDetailsQueryResult details(@PathVariable("directory_id") String directory_id) {
+    public DirectoryDetailsQueryResult details(@PathVariable("directory_id") String directoryId) {
         try {
-            Directory directory = directoryService.details(directory_id);
+            Directory directory = directoryService.details(directoryId);
             return DirectoryDetailsQueryResult.success(directory);
         } catch (Exception e) {
             return DirectoryDetailsQueryResult.fail(e.getMessage());
@@ -50,9 +50,9 @@ public class DirectoryController {
         }
     }
     @DeleteMapping(value = "{directory_id}")
-    public DeleteDirectoryCommandResult delete(@PathVariable("directory_id") String directory_id) {
+    public DeleteDirectoryCommandResult delete(@PathVariable("directory_id") String directoryId) {
         try {
-            boolean result = directoryService.delete(directory_id);
+            boolean result = directoryService.delete(directoryId);
             return DeleteDirectoryCommandResult.success(result);
         }
         catch (Exception e) {
@@ -60,10 +60,10 @@ public class DirectoryController {
         }
     }
     @PutMapping("{directory_id}")
-    public RenameDirectoryCommandResult rename(@PathVariable("id") String directory_id,
+    public RenameDirectoryCommandResult rename(@PathVariable("id") String directoryId,
                                                @RequestBody RenameDirectoryCommand renameDirectoryCommand) {
         try {
-            boolean result = directoryService.rename(directory_id, renameDirectoryCommand.getNewName(),
+            boolean result = directoryService.rename(directoryId, renameDirectoryCommand.getNewName(),
                     renameDirectoryCommand.getNewType(), renameDirectoryCommand.getNewDescription());
             return RenameDirectoryCommandResult.success(result);
         }

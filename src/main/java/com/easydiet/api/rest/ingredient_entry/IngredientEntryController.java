@@ -60,7 +60,7 @@ public class IngredientEntryController {
 
         try {
             IngredientEntry ingredientEntry = ingredientEntryService.create(
-                    createIngredientEntryCommand.getDirectory_id(),
+                    createIngredientEntryCommand.getDirectoryId(),
                     createIngredientEntryCommand.getName(),
                     createIngredientEntryCommand.getDescription()
             );

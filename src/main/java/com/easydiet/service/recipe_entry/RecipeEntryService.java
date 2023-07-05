@@ -1,7 +1,6 @@
 package com.easydiet.service.recipe_entry;
 
 import com.easydiet.domain.directory.DirectoryId;
-import com.easydiet.domain.entity_link.EntityLink;
 import com.easydiet.domain.recipe_entry.*;
 import com.sun.istack.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,10 +19,10 @@ public class RecipeEntryService {
     }
 
     @NotNull
-    public RecipeEntry create(String directory_id, String name, String content) {
+    public RecipeEntry create(String directoryId, String name, String content) {
         return recipeEntryRepository.saveAndFlush(
                 RecipeEntryOperations.create(
-                        DirectoryId.create(directory_id),
+                        DirectoryId.create(directoryId),
                         RecipeEntryName.create(name),
                         RecipeEntryContent.create(content)
                 )

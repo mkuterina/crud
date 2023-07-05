@@ -13,10 +13,12 @@ import java.time.LocalDateTime;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class RecipeEntryDetailsQueryResult {
     private String status;
-    private String directory_id;
+    private String directoryId;
     private RecipeEntryId id;
+
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime createDate;
+
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime deleteDate;
     private RecipeEntryName name;
@@ -26,7 +28,7 @@ public class RecipeEntryDetailsQueryResult {
         this.status = status;
         this.message = message;
         if (recipeEntry != null) {
-            this.directory_id = recipeEntry.getDirectory_id();
+            this.directoryId = recipeEntry.getDirectoryId();
             this.id = recipeEntry.getId();
             this.createDate = recipeEntry.getCreateDate();
             this.deleteDate = recipeEntry.getDeleteDate();

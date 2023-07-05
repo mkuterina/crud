@@ -8,7 +8,7 @@ public class DirectoryIdConverter implements
         AttributeConverter<DirectoryId, String> {
     @Override
     public String convertToDatabaseColumn(DirectoryId directoryId) {
-        return directoryId.getDirectory_id();
+        return directoryId.getDirectoryId();
     }
 
     @Override

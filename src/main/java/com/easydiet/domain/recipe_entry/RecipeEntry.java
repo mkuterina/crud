@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 public class RecipeEntry {
 
     @Column(name = "directory_id")
-    private String directory_id;
+    private String directoryId;
 
     @Id
     @Column(name = "id")
@@ -41,8 +41,9 @@ public class RecipeEntry {
     public RecipeEntry() {
     }
 
-    public String getDirectory_id() {
-        return directory_id;
+
+    public String getDirectoryId() {
+        return directoryId;
     }
 
     public RecipeEntryId getId() {
@@ -73,13 +74,12 @@ public class RecipeEntry {
     // IngredientOperations Support
     //
 
-    public RecipeEntry(DirectoryId directory_id,
+    public RecipeEntry(DirectoryId directoryId,
                        RecipeEntryId id,
                        LocalDateTime createDate,
                        RecipeEntryName name,
-                       String content,
-                       EntityStatus status) {
-        this.directory_id = directory_id.getDirectory_id();
+                       String content, EntityStatus status) {
+        this.directoryId = directoryId.getDirectoryId();
         this.id = id.getId();
         this.createDate = createDate;
         this.name = name;

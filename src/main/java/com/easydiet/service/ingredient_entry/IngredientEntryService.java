@@ -19,10 +19,10 @@ public class IngredientEntryService {
     }
 
     @NotNull
-    public IngredientEntry create(String directory_id, String name, String description) {
+    public IngredientEntry create(String directoryId, String name, String description) {
         return ingredientEntryRepository.saveAndFlush(
                 IngredientEntry.create(
-                        DirectoryId.create(directory_id),
+                        DirectoryId.create(directoryId),
                         IngredientEntryName.create(name),
                         IngredientEntryDescription.create(description)
                 )

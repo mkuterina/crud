@@ -1,6 +1,5 @@
 package com.easydiet.domain.entity_link;
 
-import com.easydiet.domain.EntityStatus;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,11 +16,14 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Getter
 public class EntityLinkType {
+
     @Id
     private String code;
     private String description;
+
     @Column(name = "create_date")
     private LocalDateTime createDate;
+
     @Column(name = "delete_date")
     private LocalDateTime deleteDate;
     private String status;

@@ -5,19 +5,19 @@ import lombok.Data;
 
 @Data
 public class DirectoryBrief {
-    private String directory_id;
+    private String directoryId;
     private String name;
     private String type;
     private String description;
 
     public DirectoryBrief(String directory_id, String name, String type, String description) {
-        this.directory_id = directory_id;
+        this.directoryId = directory_id;
         this.name = name;
         this.type = type;
         this.description = description;
     }
     public static DirectoryBrief from(Directory directory) {
-        return new DirectoryBrief(directory.getDirectory_id(),
+        return new DirectoryBrief(directory.getDirectoryId(),
                 directory.getName(),
                 directory.getType(),
                 directory.getDescription()

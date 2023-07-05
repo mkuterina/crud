@@ -59,7 +59,7 @@ public class RecipeEntryController {
     @PostMapping
     public CreateRecipeEntryCommandResult create(@RequestBody CreateRecipeEntryCommand createRecipeEntryCommand) {
         try {
-            RecipeEntry recipeEntry = recipeEntryService.create(createRecipeEntryCommand.getDirectory_id(),
+            RecipeEntry recipeEntry = recipeEntryService.create(createRecipeEntryCommand.getDirectoryId(),
                     createRecipeEntryCommand.getName(),
                     createRecipeEntryCommand.getContent());
             return CreateRecipeEntryCommandResult.success(recipeEntry);

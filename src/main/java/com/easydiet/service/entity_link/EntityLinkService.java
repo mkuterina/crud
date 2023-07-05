@@ -3,14 +3,11 @@ package com.easydiet.service.entity_link;
 import com.easydiet.domain.OperationForbiddenException;
 import com.easydiet.domain.entity_link.*;
 import com.easydiet.service.ConsistencyViolationException;
-import com.sun.istack.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor

@@ -15,17 +15,22 @@ import java.time.LocalDateTime;
 public class EntityLinkRule {
     @Id
     private String id;
+
     @ManyToOne
     @JoinColumn(name = "link_type", referencedColumnName = "code")
     private EntityLinkType linkType;
+
     @ManyToOne
     @JoinColumn(name = "allowed_origin_type", referencedColumnName = "code")
     private EntityType allowedOriginType;
+
     @ManyToOne
     @JoinColumn(name = "allowed_destination_type", referencedColumnName = "code")
     private EntityType allowedDestinationType;
+
     @Column(name = "create_date")
     private LocalDateTime createDate;
+
     @Column(name = "delete_date")
     private LocalDateTime deleteDate;
     private String status;
