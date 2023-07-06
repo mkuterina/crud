@@ -30,15 +30,10 @@ public class IngredientEntryController {
 
     @GetMapping
     public ListIngredientEntriesQueryResult list(
-            @RequestParam(value = "directory_id", required = false) String directoryId) {
+            @RequestParam(value = "directoryId", required = false) String directoryId) {
         try {
-            if (directoryId == null || directoryId.isBlank()) {
-                List<IngredientEntry> ingredientEntries = ingredientEntryService.list(directoryId);
-                return ListIngredientEntriesQueryResult.success(ingredientEntries);
-            } else {
-                List<IngredientEntry> ingredientEntries = ingredientEntryService.list(directoryId);
-                return ListIngredientEntriesQueryResult.success(ingredientEntries);
-            }
+            List<IngredientEntry> ingredientEntries = ingredientEntryService.list(directoryId);
+            return ListIngredientEntriesQueryResult.success(ingredientEntries);
         } catch (Exception e) {
             return ListIngredientEntriesQueryResult.fail(e.getMessage());
         }

@@ -49,7 +49,7 @@ public class DirectoryService {
         }
         else {
             Directory directory = optionalDirectory.get();
-            boolean result = directory.delete();;
+            boolean result = directory.delete();
             directoryRepository.save(directory);
             return result;
         }
@@ -65,8 +65,7 @@ public class DirectoryService {
             throw new DirectoryNotFoundException(directoryId);
         }
         else {
-            Directory directory = optionalDirectory.get();
-            return directory;
+            return optionalDirectory.get();
         }
     }
 }
