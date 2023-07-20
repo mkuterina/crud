@@ -1,6 +1,7 @@
 package com.easydiet.service.recipe_entry;
 
 import com.easydiet.domain.directory.DirectoryId;
+import com.easydiet.domain.entity_link.EntityLinkRepository;
 import com.easydiet.domain.recipe_entry.*;
 import com.sun.istack.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,10 +13,12 @@ import java.util.Optional;
 @Service
 public class RecipeEntryService {
     private final RecipeEntryRepository recipeEntryRepository;
+    private final EntityLinkRepository entityLinkRepository;
 
     @Autowired
-    public RecipeEntryService(RecipeEntryRepository recipeEntryRepository) {
+    public RecipeEntryService(RecipeEntryRepository recipeEntryRepository, EntityLinkRepository entityLinkRepository) {
         this.recipeEntryRepository = recipeEntryRepository;
+        this.entityLinkRepository = entityLinkRepository;
     }
 
     @NotNull
@@ -78,4 +81,5 @@ public class RecipeEntryService {
                 .filter(RecipeEntry -> !RecipeEntry.isDeleted())
                 .toList();
     }
+
 }

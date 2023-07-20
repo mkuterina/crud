@@ -35,7 +35,11 @@ public class EntityLinkRule {
     private LocalDateTime deleteDate;
     private String status;
 
-    public boolean allows(EntityType originType, EntityType destinationType) {
-        return (allowedOriginType.equals(originType) && allowedDestinationType.equals(destinationType));
+    public boolean allows(EntityLinkType linkType, EntityType originType, EntityType destinationType) {
+        return (this.linkType.equals(linkType) && allowedOriginType.equals(originType) && allowedDestinationType.equals(destinationType));
+    }
+
+    public boolean isDeleted() {
+        return deleteDate != null;
     }
 }

@@ -10,7 +10,8 @@ public class IngredientEntryBrief {
     private String name;
     private String description;
 
-    public IngredientEntryBrief(String directoryId, String id, String name, String description) {
+    public IngredientEntryBrief(String directoryId, String id,
+                                String name, String description) {
         this.directoryId = directoryId;
         this.id = id;
         this.name = name;

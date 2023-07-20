@@ -1,6 +1,5 @@
 package com.easydiet.domain.entity_link;
 
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -64,5 +63,19 @@ public class EntityLink {
                 null,
                 "ENABLED"
         );
+    }
+
+    public boolean isDeleted() {
+        return deleteDate != null;
+    }
+
+    public boolean delete() {
+        if (deleteDate != null) {
+            return false;
+        }
+        else {
+            this.deleteDate = LocalDateTime.now();
+            return true;
+        }
     }
 }

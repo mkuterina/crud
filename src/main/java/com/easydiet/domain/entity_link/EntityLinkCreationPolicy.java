@@ -8,9 +8,9 @@ import java.util.List;
 public class EntityLinkCreationPolicy {
 
     private final List<EntityLinkRule> rules;
-    public boolean allowsCreationLink(EntityType originType, EntityType destinationType) {
+    public boolean allowsCreationLink(EntityLinkType linkType, EntityType originType, EntityType destinationType) {
         for (EntityLinkRule rule : rules) {
-            if (rule.allows(originType, destinationType)) {
+            if (rule.allows(linkType, originType, destinationType)) {
                 return true;
             }
         }

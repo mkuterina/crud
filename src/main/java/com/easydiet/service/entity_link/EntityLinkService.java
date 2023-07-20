@@ -18,6 +18,8 @@ public class EntityLinkService {
     private final EntityLinkTypeRepository entityLinkTypeRepository;
     private final EntityLinkCreationPolicyRepository entityLinkCreationPolicyRepository;
     private final EntityLinkOperations entityLinkOperations;
+
+
     public EntityLink create(
             String typeCode,
             String originId,
@@ -68,5 +70,40 @@ public class EntityLinkService {
 
         return entityLink;
     }
+
+    public boolean delete(String id) {
+        Optional<EntityLink> optionalEntityLink = entityLinkRepository.findByIdentifier(id);
+        if (optionalEntityLink.isEmpty()) {
+            return false;
+        }
+        else {
+            EntityLink entityLink = optionalEntityLink.get();
+            boolean result = entityLink.delete();
+            entityLinkRepository.save(entityLink);
+            return result;
+        }
+    }
+
+    public List<EntityLink> findAllByOriginTypeAndDestinationIdAndDestinationType(String originType,
+                                                                                  String destinationType,
+                                                                                  String destinationId) {
+        Optional<EntityType> optionalOriginType = entityTypeRepository.findByCode(originType);
+        if (optionalOriginType.isEmpty()) {
+            throw new IllegalStateException();
+        }
+        EntityType ot = optionalOriginType.get();
+
+        Optional<EntityType> optionalDestinationType = entityTypeRepository.findByCode(destinationType);
+        if (optionalDestinationType.isEmpty()) {
+            throw new IllegalStateException();
+        }
+        EntityType dt = optionalDestinationType.get();
+
+        return entityLinkRepository.findAllByOriginTypeAndDestinationIdAndDestinationType(ot, dt, destinationId).stream()
+                .filter(EntityLink -> !EntityLink.isDeleted()).toList();
+
+    }
 }
 
+
+   // Collections.emptyList()

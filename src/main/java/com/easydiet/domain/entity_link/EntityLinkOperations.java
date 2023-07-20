@@ -21,7 +21,7 @@ public class EntityLinkOperations {
     ) throws
             OperationForbiddenException
     {
-        if (!policy.allowsCreationLink(originType, destinationType)) {
+        if (!policy.allowsCreationLink(entityLinkType, originType, destinationType)) {
             throw new OperationForbiddenException("Запрещено создавать связи с такими типами origin и destination");
         }
 
