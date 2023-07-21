@@ -99,8 +99,8 @@ public class EntityLinkService {
         }
         EntityType dt = optionalDestinationType.get();
 
-        return entityLinkRepository.findAllByOriginTypeAndDestinationIdAndDestinationType(ot, dt, destinationId).stream()
-                .filter(EntityLink -> !EntityLink.isDeleted()).toList();
+        return entityLinkRepository.findAllByOriginTypeAndDestinationIdAndDestinationType(ot, dt, destinationId)
+                .stream().filter(EntityLink -> !EntityLink.isDeleted()).toList();
 
     }
 }
