@@ -18,10 +18,6 @@ public class GroupEntryId implements Serializable {
     @Column(name = "id")
     private String id;
 
-    private GroupEntryId() {
-        this.id = "DEFAULT";
-    }
-
     @Override
     public String toString() {
         return "GroupEntryId(" + id + ")";

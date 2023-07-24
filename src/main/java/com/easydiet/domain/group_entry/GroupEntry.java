@@ -5,10 +5,11 @@ import com.easydiet.domain.EntityStatusConverter;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-
+@ToString
 @Entity
 @Table(name = "group_entry")
 @NoArgsConstructor
@@ -21,7 +22,7 @@ public class GroupEntry {
 
     @Id
     @Column(name = "id")
-    private GroupEntryId id;
+    private String id;
 
     @Column(name = "group_name")
     @Convert(converter = GroupEntryNameConverter.class)
@@ -45,7 +46,8 @@ public class GroupEntry {
     @Convert(converter = EntityStatusConverter.class)
     private EntityStatus status;
 
-    public GroupEntry create(
+
+    public static GroupEntry create(
             String directoryId,
             GroupEntryName name,
             GroupEntryType type,
@@ -54,14 +56,16 @@ public class GroupEntry {
          if (name == null) {
             throw new IllegalStateException("Имя ингридиента должно быть задано");
         }
-        return new GroupEntry(directoryId,
-                GroupEntryId.create(),
+        return new GroupEntry(
+                directoryId,
+                GroupEntryId.create().getId(),
                 name,
                 type,
                 description,
                 LocalDateTime.now(),
                 null,
-                EntityStatus.ENABLED);
+                EntityStatus.ENABLED
+        );
     }
 
     public boolean delete() {
@@ -91,7 +95,5 @@ public class GroupEntry {
             return true;
         }
     }
-
-
 }
 

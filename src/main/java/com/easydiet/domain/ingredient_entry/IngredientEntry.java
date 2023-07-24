@@ -110,7 +110,7 @@ public class IngredientEntry {
         return deleteDate != null;
     }
 
-    public boolean rename(IngredientEntryName newName) {
+    public boolean rename(IngredientEntryName newName, IngredientEntryDescription description) {
         if (newName == null) {
             throw new IllegalStateException("Имя ингридиента должно быть задано");
         }

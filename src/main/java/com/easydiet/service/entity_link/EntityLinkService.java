@@ -104,6 +104,3 @@ public class EntityLinkService {
 
     }
 }
-
-
-   // Collections.emptyList()
