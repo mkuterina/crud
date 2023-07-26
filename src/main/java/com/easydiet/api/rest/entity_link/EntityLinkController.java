@@ -9,8 +9,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
-
 
 @RestController
 @RequestMapping("entity_links")
@@ -18,8 +16,6 @@ import java.util.Optional;
 public class EntityLinkController {
 
     private final EntityLinkService entityLinkService;
-    private final EntityLinkRepository entityLinkRepository;
-    private final EntityTypeRepository entityTypeRepository;
 
     @PostMapping
     public ResponseEntity<CreateEntityLinkResponse> create(
