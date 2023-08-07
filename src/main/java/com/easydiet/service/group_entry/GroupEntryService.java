@@ -1,9 +1,11 @@
 package com.easydiet.service.group_entry;
 
+import com.easydiet.domain.entity_link.EntityLinkRule;
 import com.easydiet.domain.group_entry.*;
 import lombok.AllArgsConstructor;
 
 import org.jetbrains.annotations.NotNull;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -67,13 +69,14 @@ public class GroupEntryService {
                 .toList();
     }
 
-    public GroupEntry details(String id)
-        throws GroupEntryNotFoundException {
-        Optional<GroupEntry> optionalGroupEntry = groupEntryRepository.findByIdentifier(id);
+    public GroupEntry findById(String id) {
+        Optional<GroupEntry> optionalGroupEntry = groupEntryRepository.findById(id);
         if (optionalGroupEntry.isEmpty()) {
-            throw new GroupEntryNotFoundException(id);
-        } else {
-            return optionalGroupEntry.get();
+            throw new IllegalStateException();
         }
+        GroupEntry ge = optionalGroupEntry.get();
+        return ge;
     }
 }
+
+

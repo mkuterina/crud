@@ -15,11 +15,15 @@ public interface GroupEntryRepository extends JpaRepository<GroupEntry, String> 
     @Query(value = "select g from GroupEntry g where id = :id and (status = 'ENABLED' or status = 'ENABLED_BY_ID')")
     Optional<GroupEntry> findByIdentifier(String id);
 
+    @Query(value = "select g from GroupEntry g where id = :id and (status = 'ENABLED' or status = 'ENABLED_BY_ID')")
+    Optional<GroupEntry> findById(@Param("id") String id);
+
     @Query(value = "select g from GroupEntry g where status = 'ENABLED' or status = 'ENABLED_IN_LIST'")
     List<GroupEntry> listAll();
 
     @Query(value = "select g from GroupEntry g where directoryId = :directoryId and (status = 'ENABLED' or status = 'ENABLED_IN_LIST')")
     Collection<GroupEntry> listAllByDirectoryId(
             @Param("directoryId") String directoryId);
+
 
 }

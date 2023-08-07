@@ -9,23 +9,23 @@ import java.util.List;
 
 @Getter
 @AllArgsConstructor
-public class GetGroupEntryResponse {
+public class GetGroupEntriesResponse {
     private String status;
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    private GroupEntry result;
+    private List<GroupEntry> result;
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private String message;
 
-    public static GetGroupEntryResponse success(GroupEntry groupEntry) {
-        return new GetGroupEntryResponse(
+    public static GetGroupEntriesResponse success(List<GroupEntry> groupEntries) {
+        return new GetGroupEntriesResponse(
                 "success",
-                groupEntry,
+                groupEntries,
                 null
         );
     }
 
-    public static GetGroupEntryResponse fail(Exception e) {
-        return new GetGroupEntryResponse(
+    public static GetGroupEntriesResponse fail(Exception e) {
+        return new GetGroupEntriesResponse(
                 "fail",
                 null,
                 e.getMessage()

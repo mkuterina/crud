@@ -1,12 +1,15 @@
 package com.easydiet.api.rest.group_entry;
 
 import com.easydiet.domain.group_entry.GroupEntry;
+import com.easydiet.domain.group_entry.GroupEntryRepository;
 import com.easydiet.service.group_entry.GroupEntryService;
 import lombok.RequiredArgsConstructor;
+import org.apache.coyote.Response;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("group_entry")
@@ -14,6 +17,7 @@ import java.util.List;
 public class GroupEntryController {
 
     private final GroupEntryService groupEntryService;
+    private final GroupEntryRepository groupEntryRepository;
 
     @PostMapping
     public ResponseEntity<CreateGroupEntryResponse> create(
@@ -37,35 +41,35 @@ public class GroupEntryController {
     }
 
     @DeleteMapping("{id}")
-    public DeleteGroupEntryCommandResult delete(
+    public ResponseEntity<DeleteGroupEntryCommandResult> delete(
             @PathVariable("id") String id) {
         try {
             boolean result = groupEntryService.delete(id);
-            return DeleteGroupEntryCommandResult.success(result);
+            return ResponseEntity.ok(DeleteGroupEntryCommandResult.success(result));
         } catch (Exception e) {
-            return DeleteGroupEntryCommandResult.fail(e.getMessage());
+            return ResponseEntity.badRequest().body(DeleteGroupEntryCommandResult.fail(e.getMessage()));
         }
     }
 
-     @GetMapping
-    public GetGroupEntryResponse list(
+    @GetMapping
+    public ResponseEntity<GetGroupEntriesResponse> list(
             @RequestParam(value = "directoryId", required = false) String directoryId) {
         try {
             List<GroupEntry> groupEntries = groupEntryService.list(directoryId);
-            return GetGroupEntryResponse.success(groupEntries);
+            return ResponseEntity.ok(GetGroupEntriesResponse.success(groupEntries));
         } catch (Exception e) {
-            return GetGroupEntryResponse.fail(e);
+            return ResponseEntity.badRequest().body(GetGroupEntriesResponse.fail(e));
         }
     }
 
     @GetMapping("{id}")
-    public GroupEntryDetailsQueryResult details(@PathVariable("id") String id) {
+    public ResponseEntity<GetGroupEntryResponse> details(@PathVariable("id") String id) {
         try {
-            GroupEntry groupEntry = groupEntryService.details(id);
-            return GroupEntryDetailsQueryResult.success(groupEntry);
+            GroupEntry ge = groupEntryService.findById(id);
+            return ResponseEntity.ok(GetGroupEntryResponse.success(ge));
         }
         catch (Exception e) {
-            return GroupEntryDetailsQueryResult.fail(e.getMessage());
+            return ResponseEntity.badRequest().body(GetGroupEntryResponse.fail(e));
         }
     }
 
@@ -80,3 +84,4 @@ public class GroupEntryController {
          }
      }
 }
+
