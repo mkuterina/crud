@@ -1,11 +1,9 @@
 package com.easydiet.service.group_entry;
 
-import com.easydiet.domain.entity_link.EntityLinkRule;
 import com.easydiet.domain.group_entry.*;
 import lombok.AllArgsConstructor;
 
 import org.jetbrains.annotations.NotNull;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
