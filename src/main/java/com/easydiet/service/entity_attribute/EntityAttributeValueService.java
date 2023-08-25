@@ -59,8 +59,7 @@ public class EntityAttributeValueService {
         if (optionalEntityAttributeValue.isEmpty()) {
             throw new IllegalStateException();
         }
-        EntityAttributeValue eav = optionalEntityAttributeValue.get();
-        return eav;
+        return optionalEntityAttributeValue.get();
     }
 
 

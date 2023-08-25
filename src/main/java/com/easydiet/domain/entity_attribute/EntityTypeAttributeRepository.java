@@ -27,7 +27,6 @@ public interface EntityTypeAttributeRepository extends JpaRepository<EntityTypeA
       @Query(value = "select e from EntityTypeAttribute e where name = :name and entityType = :entityType and status != 'DISABLED'")
       List<EntityTypeAttribute> findByEntityTypeAndName( EntityTypeAttribute entityType, EntityTypeAttributeName name);
 
-
-
-
+      @Query(value = "select e from EntityTypeAttribute e where name = :name and entityType = :entityType and status != 'DISABLED'")
+      Optional<EntityTypeAttribute> findByNameAndEntityType(EntityTypeAttributeName attributeName, EntityType entityType);
 }
