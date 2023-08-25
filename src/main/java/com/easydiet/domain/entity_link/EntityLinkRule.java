@@ -38,8 +38,4 @@ public class EntityLinkRule {
     public boolean allows(EntityLinkType linkType, EntityType originType, EntityType destinationType) {
         return (this.linkType.equals(linkType) && allowedOriginType.equals(originType) && allowedDestinationType.equals(destinationType));
     }
-
-    public boolean isDeleted() {
-        return deleteDate != null;
-    }
 }
