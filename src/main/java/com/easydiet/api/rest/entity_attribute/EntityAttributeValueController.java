@@ -17,21 +17,21 @@ public class EntityAttributeValueController {
     private final EntityAttributeValueService entityAttributeValueService;
 
     @PostMapping
-    public ResponseEntity<SetEntityAttributeValueResponse> setEntityAttribute(
-            @RequestBody SetEntityAttributeValueRequest request
+    public ResponseEntity<CreateEntityAttributeValueResponse> create(
+            @RequestBody CreateEntityAttributeValueRequest request
     ) {
         try {
-            EntityAttributeValue entityAttributeValue = entityAttributeValueService.setEntityAttribute(
-                    request.getEntityType(),
+            EntityAttributeValue entityAttributeValue = entityAttributeValueService.create(
+                    request.getEntityTypeCode(),
                     request.getEntityId(),
-                    EntityTypeAttributeName.create(request.getEntityTypeAttributeName()),
+                    EntityTypeAttributeName.create(request.getAttributeName()),
                     request.getValue()
             );
-            return ResponseEntity.ok(SetEntityAttributeValueResponse.success(entityAttributeValue)
+            return ResponseEntity.ok(CreateEntityAttributeValueResponse.success(entityAttributeValue)
             );
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN)
-                    .body(SetEntityAttributeValueResponse.fail(e));
+                    .body(CreateEntityAttributeValueResponse.fail(e));
         }
     }
 

@@ -3,6 +3,8 @@ package com.easydiet.service.entity_attribute;
 import com.easydiet.domain.entity_attribute.EntityTypeAttribute;
 import com.easydiet.domain.entity_attribute.EntityTypeAttributeName;
 import com.easydiet.domain.entity_attribute.EntityTypeAttributeRepository;
+import com.easydiet.domain.entity_link.EntityType;
+import com.easydiet.domain.entity_link.EntityTypeRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -13,23 +15,19 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class EntityTypeAttributeService {
 
+    private final EntityTypeRepository entityTypeRepository;
     private final EntityTypeAttributeRepository entityTypeAttributeRepository;
 
-    public List<EntityTypeAttribute> findByEntityTypeAndName(String entityType, String name) {
+    public Optional<EntityTypeAttribute> findByEntityTypeAndName(String entityType, String name) {
 
-        Optional<EntityTypeAttribute> optionalEntityType = entityTypeAttributeRepository.findByEntityType(entityType);
+        Optional<EntityType> optionalEntityType = entityTypeRepository.findByCode(entityType);
         if (optionalEntityType.isEmpty()) {
             throw new IllegalStateException();
         }
-        EntityTypeAttribute et = optionalEntityType.get();
+        EntityType et = optionalEntityType.get();
 
-        Optional<EntityTypeAttributeName> optionalName = entityTypeAttributeRepository.findByName(name);
-        if (optionalName.isEmpty()) {
-            throw new IllegalStateException();
-        }
-        EntityTypeAttributeName an = optionalName.get();
+        EntityTypeAttributeName an = EntityTypeAttributeName.create(name);
 
-        return entityTypeAttributeRepository.findByEntityTypeAndName(et, an)
-                .stream().filter(EntityTypeAttribute -> !EntityTypeAttribute.isDeleted()).toList();
+        return entityTypeAttributeRepository.findByEntityTypeAndName(et, an);
     }
 }

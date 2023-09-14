@@ -17,7 +17,7 @@ public interface EntityAttributeValueRepository extends JpaRepository<EntityAttr
 
 
       @Query(value = "select e from EntityAttributeValue e where entityType = :entityType and (status = 'ENABLED' or status = 'ENABLED_IN_LIST')")
-      Optional<EntityAttributeValue> findAllByEntityType(@Param("entityType") String entityType);
+      Optional<EntityAttributeValue> findByEntityType(@Param("entityType") String entityType);
 
       @Query(value = "select e from EntityAttributeValue e where entityId = :entityId and (status = 'ENABLED' or status = 'ENABLED_IN_LIST')")
       List<EntityAttributeValue> findAllByEntityId(@Param("entityId") String entityId);

@@ -28,8 +28,8 @@ public class EntityAttributeValue {
     private String entityId;
 
     @ManyToOne
-    @JoinColumn(name = "entity_type_attribute_id", referencedColumnName = "entity_type_attribute.id")
-    private String entityTypeAttributeId;
+    @JoinColumn(name = "entity_type_attribute_id", referencedColumnName = "id")
+    private EntityTypeAttribute entityTypeAttributeId;
 
     @Column(name = "value")
     private String value;
@@ -47,7 +47,7 @@ public class EntityAttributeValue {
     public static EntityAttributeValue create(
             EntityType entityType,
             String entityId,
-            String entityTypeAttributeId,
+            EntityTypeAttribute entityTypeAttributeId,
             String value
     ) {
         String id = UUID.randomUUID().toString();

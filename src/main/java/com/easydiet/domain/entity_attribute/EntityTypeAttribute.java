@@ -2,10 +2,10 @@ package com.easydiet.domain.entity_attribute;
 
 import com.easydiet.domain.EntityStatus;
 import com.easydiet.domain.EntityStatusConverter;
+import com.easydiet.domain.entity_link.EntityType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.type.EntityType;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -29,7 +29,7 @@ public class EntityTypeAttribute {
     @JoinColumn(name = "entity_type_code", referencedColumnName = "code")
     private EntityType entityType;
 
-    @Column(name = "attributeType")
+    @Column(name = "attribute_type")
     private String attributeType;
 
     @Column(name = "description")

@@ -5,9 +5,9 @@ import lombok.Getter;
 
 @AllArgsConstructor
 @Getter
-public class SetEntityAttributeValueRequest {
-    private String entityType;
+public class CreateEntityAttributeValueRequest {
+    private String entityTypeCode;
     private String entityId;
-    private String entityTypeAttributeName;
+    private String attributeName;
     private String value;
 }

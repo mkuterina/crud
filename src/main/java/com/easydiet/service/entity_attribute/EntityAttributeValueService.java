@@ -18,7 +18,10 @@ public class EntityAttributeValueService {
     private final EntityTypeAttributeRepository entityTypeAttributeRepository;
     private final EntityAttributeValueRepository entityAttributeValueRepository;
 
-    public EntityAttributeValue setEntityAttribute(String entityTypeCode, String entityId, EntityTypeAttributeName attributeName, String value) {
+    public EntityAttributeValue create(String entityTypeCode,
+                                                   String entityId,
+                                                   EntityTypeAttributeName attributeName,
+                                                   String value) {
         Optional<EntityType> optionalEntityType = entityTypeRepository.findByCode(entityTypeCode);
         if (optionalEntityType.isEmpty()) {
             throw new IllegalArgumentException("Неправильно задан тип сущности");
@@ -31,7 +34,7 @@ public class EntityAttributeValueService {
         }
         EntityTypeAttribute entityTypeAttribute = optionalEntityTypeAttribute.get();
 
-        EntityAttributeValue entityAttributeValue = EntityAttributeValue.create(entityType, entityId, entityTypeAttribute.getId(), value);
+        EntityAttributeValue entityAttributeValue = EntityAttributeValue.create(entityType, entityId, entityTypeAttribute, value);
         entityAttributeValueRepository.save(entityAttributeValue);
 
         return entityAttributeValue;
@@ -63,8 +66,8 @@ public class EntityAttributeValueService {
     }
 
 
-     public EntityAttributeValue findAllByEntityType(String entityType) {
-        Optional<EntityAttributeValue> optionalEntityAttributeValue = entityAttributeValueRepository.findAllByEntityType(entityType);
+     public EntityAttributeValue findByEntityType(String entityType) {
+        Optional<EntityAttributeValue> optionalEntityAttributeValue = entityAttributeValueRepository.findByEntityType(entityType);
         if (optionalEntityAttributeValue.isEmpty()) {
             throw new IllegalArgumentException();
         }

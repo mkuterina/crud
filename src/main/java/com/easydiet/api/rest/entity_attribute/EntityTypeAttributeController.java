@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
@@ -23,9 +24,12 @@ public class EntityTypeAttributeController {
             @RequestParam(value = "name", required = false) String name
     ) {
         try {
-            List<EntityTypeAttribute> entityTypeAttributes = entityTypeAttributeService
+            Optional<EntityTypeAttribute> entityTypeAttribute = entityTypeAttributeService
                     .findByEntityTypeAndName(entityType, name);
-            return ResponseEntity.ok(GetEntityTypeAttributeResponse.success((EntityTypeAttribute) entityTypeAttributes));
+            if (entityTypeAttribute.isEmpty()) {
+                return ResponseEntity.notFound().build();
+            }
+            return ResponseEntity.ok(GetEntityTypeAttributeResponse.success(entityTypeAttribute.get()));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(GetEntityTypeAttributeResponse.fail(e));
         }

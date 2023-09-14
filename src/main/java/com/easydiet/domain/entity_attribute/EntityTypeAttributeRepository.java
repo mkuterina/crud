@@ -1,6 +1,7 @@
 package com.easydiet.domain.entity_attribute;
 
 import com.easydiet.domain.entity_link.EntityType;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -18,15 +19,15 @@ public interface EntityTypeAttributeRepository extends JpaRepository<EntityTypeA
       Optional<EntityTypeAttribute> findById(@Param("id") String id);
 
 
-      @Query(value = "select e from EntityTypeAttribute e where entityType = :entityType and (status = 'ENABLED' or status = 'ENABLED_IN_LIST')")
-      Optional<EntityTypeAttribute> findByEntityType (@Param("entityType") String entityType);
+      @Query(value = "select e from EntityTypeAttribute e where entityType.code = :entityTypeCode and (status = 'ENABLED' or status = 'ENABLED_IN_LIST')")
+      Optional<EntityTypeAttribute> findByEntityType (@Param("entityTypeCode") String entityTypeCode);
 
       @Query(value = "select e from EntityTypeAttribute e where name = :name and (status = 'ENABLED' or status = 'ENABLED_IN_LIST')")
       Optional<EntityTypeAttributeName> findByName (@Param("name") String name);
 
       @Query(value = "select e from EntityTypeAttribute e where name = :name and entityType = :entityType and status != 'DISABLED'")
-      List<EntityTypeAttribute> findByEntityTypeAndName( EntityTypeAttribute entityType, EntityTypeAttributeName name);
+      Optional<EntityTypeAttribute> findByEntityTypeAndName( EntityType entityType, EntityTypeAttributeName name);
 
       @Query(value = "select e from EntityTypeAttribute e where name = :name and entityType = :entityType and status != 'DISABLED'")
-      Optional<EntityTypeAttribute> findByNameAndEntityType(EntityTypeAttributeName attributeName, EntityType entityType);
+      Optional<EntityTypeAttribute> findByNameAndEntityType(@Param("name") EntityTypeAttributeName attributeName, EntityType entityType);
 }
