@@ -1,6 +1,5 @@
 package com.easydiet.api.rest.entity_attribute;
 
-import com.easydiet.api.rest.entity_link.DeleteEntityLinkCommandResult;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 

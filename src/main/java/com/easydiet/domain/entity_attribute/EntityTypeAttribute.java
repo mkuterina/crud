@@ -51,7 +51,7 @@ public class EntityTypeAttribute {
             EntityType entityType,
             String attributeType,
             EntityTypeAttributeDescription description
-    ) {
+) {
         String id = UUID.randomUUID().toString();
         LocalDateTime createDate = LocalDateTime.now();
 

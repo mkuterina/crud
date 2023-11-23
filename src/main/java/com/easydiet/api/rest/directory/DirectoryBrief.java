@@ -23,5 +23,4 @@ public class DirectoryBrief {
                 directory.getDescription()
         );
     }
-
 }
