@@ -9,11 +9,11 @@
 		<version>2.7.5</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>com.easydiet.crud</groupId>
-	<artifactId>crud</artifactId>
+	<groupId>com.easydiet-apps</groupId>
+	<artifactId>easydiet</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>crud</name>
-	<description>CRUD functions</description>
+	<name>Easy Diet</name>
+	<description>Easy Diet main application</description>
 	<properties>
 		<java.version>17</java.version>
 		<main-class>com.easydiet.application.EasyDietApplication</main-class>
