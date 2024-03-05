@@ -1,32 +1,35 @@
-package com.easydiet.domain.workspace;
+package com.easydiet.domain.authorization_service;
 
 import com.easydiet.domain.EntityStatus;
 import com.easydiet.domain.EntityStatusConverter;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @ToString
 @Entity
-@Table(name = "workspace")
+@Table(name = "user_ws_assignment")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
-public class Workspace {
-
+public class UserWorkspaceAssignment {
     @Id
     @Column(name = "id")
     private String id;
 
-    @Column(name = "workspace_name")
-    private String name;
+    @Column(name = "user_id")
+    private String userId;
 
-    @Column(name = "workspace_type")
-    private String type;
+    @Column(name = "workspace_id")
+    private String workspaceId;
 
-    @Column(name = "workspace_description")
-    private String description;
+    @Column(name = "role")
+    @Convert(converter = RoleConverter.class)
+    private Role role;
 
     @Column(name = "create_date")
     private LocalDateTime createDate;

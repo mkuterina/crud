@@ -1,4 +1,4 @@
-package com.easydiet.domain.workspace;
+package com.easydiet.domain.authorization_service;
 
 import com.easydiet.domain.EntityStatus;
 import com.easydiet.domain.EntityStatusConverter;

@@ -1,4 +1,4 @@
-package com.easydiet.domain.workspace;
+package com.easydiet.domain.authorization_service;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
