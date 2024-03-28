@@ -5,7 +5,8 @@ import java.time.LocalDateTime;
 public class DirectoryOperations {
     public static Directory create(DirectoryName name,
                                    DirectoryType type,
-                                   DirectoryDescription description) {
+                                   DirectoryDescription description,
+                                   String workspaceId) {
         if (name == null) {
             throw new IllegalStateException("Имя справочника должно быть задано.");
         }
@@ -13,6 +14,7 @@ public class DirectoryOperations {
                 name,
                 type,
                 description,
-                LocalDateTime.now());
+                LocalDateTime.now(),
+                workspaceId);
     }
 }

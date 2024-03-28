@@ -1,29 +1,40 @@
 package com.easydiet.service.directory;
 
+import com.easydiet.domain.OperationForbiddenException;
+import com.easydiet.domain.authorization_service.AuthorizationService;
+import com.easydiet.domain.authorization_service.Role;
 import com.easydiet.domain.directory.*;
 import com.sun.istack.NotNull;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class DirectoryService {
 
     private final DirectoryRepository directoryRepository;
+    private final AuthorizationService authorizationService;
 
-    @Autowired
-    public DirectoryService(DirectoryRepository directoryRepository) {
-        this.directoryRepository = directoryRepository;
+      @NotNull
+    public Directory create(String name, String type, String description, String userId, String workspaceId) throws OperationForbiddenException {
+        Optional<Directory> optionalDirectory = directoryRepository.findByName(name);
+        if (optionalDirectory.isPresent()) {
+            throw new OperationForbiddenException("Справочник с таким именем уже существует.");
+        }
 
-    }
-
-    @NotNull
-    public Directory create(String name, String type, String description){
+        List<Role> roles = authorizationService.getRoles(userId, workspaceId);
+        if (!roles.contains(Role.ADMINISTRATOR) && !roles.contains(Role.OWNER)) {
+            throw new OperationForbiddenException("Пользователь с таким уровнем доступа не может создать новый справочник.");
+        }
         return directoryRepository.save(
                 DirectoryOperations.create(
-                        DirectoryName.create(name), DirectoryType.create(type), DirectoryDescription.create(description)
+                        DirectoryName.create(name),
+                        DirectoryType.create(type),
+                        DirectoryDescription.create(description),
+                        workspaceId
                 )
         );
     }

@@ -13,4 +13,7 @@ public interface DirectoryRepository  extends JpaRepository<Directory, String> {
     @Query(value = "select d from Directory d where status = 'ENABLED' or status = 'ENABLED_IN_LIST'")
     List<Directory> listAll();
 
+    @Query(value = "select d from Directory d where directoryName =:directoryName and d.status != 'DISABLED'")
+    Optional<Directory> findByName(String name);
+
 }

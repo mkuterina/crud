@@ -23,6 +23,6 @@ public interface UserWorkspaceAssignmentRepository extends JpaRepository<UserWor
     Optional<UserWorkspaceAssignment> findByRole(@Param("role") String role);
 
     @Query(value = "select u from UserWorkspaceAssignment u where userId = :userId and workspaceId = :workspaceId and status != 'DISABLED'")
-    List<UserWorkspaceAssignment> findAllByUserIdAndDestinationIdAndWorkspaceId(UserWorkspaceAssignment userId, UserWorkspaceAssignment workspaceId);
+    List<UserWorkspaceAssignment> findAllByUserIdAndWorkspaceId(String userId, String workspaceId);
 
 }

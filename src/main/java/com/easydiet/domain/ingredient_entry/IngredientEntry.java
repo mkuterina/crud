@@ -5,12 +5,17 @@ import com.easydiet.domain.EntityStatusConverter;
 import com.easydiet.domain.directory.DirectoryId;
 import java.lang.String;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+
 @ToString
 @Entity
+@Getter
+@NoArgsConstructor
 @Table(name = "ingredient_entry")
 public class IngredientEntry {
 
@@ -39,8 +44,8 @@ public class IngredientEntry {
     @Convert(converter = EntityStatusConverter.class)
     private EntityStatus status;
 
-    public IngredientEntry() {
-    }
+    @Column(name = "workspace_id")
+    private String workspaceId;
 
     private IngredientEntry(
             DirectoryId directoryId,
@@ -48,7 +53,8 @@ public class IngredientEntry {
             IngredientEntryName name,
             IngredientEntryDescription description,
             LocalDateTime createDate,
-            EntityStatus status) {
+            EntityStatus status,
+            String workspaceId) {
 
         this.directoryId = directoryId.getDirectoryId();
         this.id = id.getId();
@@ -56,12 +62,14 @@ public class IngredientEntry {
         this.name = name;
         this.description = description;
         this.status = EntityStatus.ENABLED;
+        this.workspaceId = getWorkspaceId();
     }
 
     public static IngredientEntry create(
             DirectoryId directoryId,
             IngredientEntryName name,
-            IngredientEntryDescription description) {
+            IngredientEntryDescription description,
+            String workspaceId) {
 
         if (name == null) {
             throw new IllegalStateException("Имя ингридиента должно быть задано");
@@ -73,34 +81,10 @@ public class IngredientEntry {
                 name,
                 description,
                 LocalDateTime.now(),
-                EntityStatus.ENABLED
+                EntityStatus.ENABLED,
+                workspaceId
         );
     }
-
-    public String getDirectoryId() {
-        return directoryId;
-    }
-
-    public IngredientEntryId getId() {
-        return IngredientEntryId.create(id);
-    }
-
-    public LocalDateTime getCreateDate() {
-        return createDate;
-    }
-
-    public LocalDateTime getDeleteDate() {
-        return deleteDate;
-    }
-
-    public IngredientEntryName getName() {
-        return name;
-    }
-
-    public IngredientEntryDescription getDescription() {
-        return description;
-    }
-
 
     //
     // Domain Logic

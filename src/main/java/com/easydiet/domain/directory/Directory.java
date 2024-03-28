@@ -2,6 +2,8 @@ package com.easydiet.domain.directory;
 
 import com.easydiet.domain.EntityStatus;
 import com.easydiet.domain.EntityStatusConverter;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import javax.persistence.*;
@@ -10,6 +12,8 @@ import java.time.LocalDateTime;
 
 @ToString
 @Entity
+@Getter
+@NoArgsConstructor
 @Table(name = "directory")
 public class Directory {
 
@@ -36,42 +40,22 @@ public class Directory {
         @Convert(converter = EntityStatusConverter.class)
         private EntityStatus status;
 
-      public Directory() {
-        }
-    public String getDirectoryId() {
-         return directoryId;
-    }
+        @Column(name = "workspace_id")
+        private String workspaceId;
 
-    public LocalDateTime getCreateDate() {
-        return createDate;
-    }
 
-    public LocalDateTime getDeleteDate() {
-        return deleteDate;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public String getDescription() {
-        return description;
-    }
     //
-    // IngredientOperations Support
+    // DirectoryOperations Support
     //
 
-    protected Directory(DirectoryId directoryId, DirectoryName name, DirectoryType type, DirectoryDescription description, LocalDateTime createDate) {
+    protected Directory(DirectoryId directoryId, DirectoryName name, DirectoryType type, DirectoryDescription description, LocalDateTime createDate, String workspaceId) {
         this.directoryId = directoryId.getDirectoryId();
         this.name = name.getName();
         this.type = type.getType();
         this.description = description.getDescription();
         this.createDate = createDate;
         this.status = EntityStatus.ENABLED;
+        this.workspaceId = getWorkspaceId();
     }
 
     //
