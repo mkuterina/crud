@@ -15,7 +15,7 @@ public interface IngredientEntryRepository extends JpaRepository<IngredientEntry
     @Query(value = "select i from IngredientEntry i where status = 'ENABLED' or status = 'ENABLED_IN_LIST'")
     List<IngredientEntry> listAll();
 
-    @Query(value = "select r from IngredientEntry r where directoryId = :directoryId and (status = 'ENABLED' or status = 'ENABLED_IN_LIST')")
+    @Query(value = "select i from IngredientEntry i where directoryId = :directoryId and (status = 'ENABLED' or status = 'ENABLED_IN_LIST')")
     Collection<IngredientEntry> listAllByDirectoryId(@Param("directoryId") String directoryId);
 }
 

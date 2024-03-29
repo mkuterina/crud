@@ -11,6 +11,7 @@ import com.sun.istack.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -89,25 +90,34 @@ public class IngredientEntryService {
         }
     }
 
-    public List<IngredientEntry> list() {
-        return ingredientEntryRepository.listAll().stream()
-                .filter(IngredientEntry -> !IngredientEntry.isDeleted())
-                .toList();
-    }
-
-    public IngredientEntry details(String id) throws IngredientEntryNotFoundException {
-        Optional<IngredientEntry> optionalIngredientEntry = ingredientEntryRepository.findByIdentifier(id);
-        if (optionalIngredientEntry.isEmpty()) {
-            throw new IngredientEntryNotFoundException(id);
-        } else {
-            return optionalIngredientEntry.get();
+    public List<IngredientEntry> list(String directoryId, String userId) throws OperationForbiddenException {
+        Optional<Directory> optionalDirectory = directoryRepository.findByIdentifier(directoryId);
+        if (optionalDirectory.isEmpty()) {
+            throw new OperationForbiddenException("Справочник с таким идентификатором не найден.");
         }
-    }
 
-    public List<IngredientEntry> list(String directoryId) {
+        String workspaceId = optionalDirectory.get().getWorkspaceId();
+        List<Role> roles = authorizationService.getRoles(userId, workspaceId);
+        if (!roles.contains(Role.ADMINISTRATOR) && !roles.contains(Role.OWNER)) {
+            throw new OperationForbiddenException("Пользовтель с таким уровнем доступа не может просматривать список ингредиентов в справочнике.");
+        }
+
+        Collection<IngredientEntry> ingredientEntries = ingredientEntryRepository.listAllByDirectoryId(directoryId);
+        if (ingredientEntries.isEmpty()) {
+            throw new OperationForbiddenException("Справочник пуст.");
+        }
+
         return ingredientEntryRepository.listAllByDirectoryId(directoryId).stream()
                 .filter(IngredientEntry -> !IngredientEntry.isDeleted())
                 .toList();
     }
+    public IngredientEntry details(String id) throws IngredientEntryNotFoundException {
+        Optional<IngredientEntry> optionalIngredientEntry = ingredientEntryRepository.findByIdentifier(id);
+        if (optionalIngredientEntry.isEmpty()) {
+            throw new IngredientEntryNotFoundException(id);
+            } else {
+            return optionalIngredientEntry.get();
+            }
+        }
 }
 
