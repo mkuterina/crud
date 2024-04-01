@@ -1,8 +1,8 @@
 package com.easydiet.service;
 
 public class ObjectNotFoundException extends Exception {
-    public ObjectNotFoundException(String id) {
+    public ObjectNotFoundException() {
 
-        super("Object with id = " +id + " is not found.");
+        super("Object is not found.");
     }
 }
