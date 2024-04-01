@@ -111,11 +111,17 @@ public class IngredientEntryService {
                 .filter(IngredientEntry -> !IngredientEntry.isDeleted())
                 .toList();
     }
-    public IngredientEntry details(String id) throws IngredientEntryNotFoundException {
+    public IngredientEntry details(String id, String userId) throws IngredientEntryNotFoundException{
         Optional<IngredientEntry> optionalIngredientEntry = ingredientEntryRepository.findByIdentifier(id);
         if (optionalIngredientEntry.isEmpty()) {
             throw new IngredientEntryNotFoundException(id);
             } else {
+            String workspaceId = optionalIngredientEntry.get().getWorkspaceId();
+
+            List<Role> roles = authorizationService.getRoles(userId, workspaceId);
+            if (!roles.contains(Role.ADMINISTRATOR) && !roles.contains(Role.OWNER)) {
+                throw new IngredientEntryNotFoundException("Пользовтель с таким уровнем доступа не может просматривать детали записи справочника ингредиентов.");
+            }
             return optionalIngredientEntry.get();
             }
         }
