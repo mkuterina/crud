@@ -7,7 +7,6 @@ import com.easydiet.domain.directory.Directory;
 import com.easydiet.domain.directory.DirectoryId;
 import com.easydiet.domain.directory.DirectoryRepository;
 import com.easydiet.domain.ingredient_entry.*;
-import com.easydiet.service.ObjectNotFoundException;
 import com.sun.istack.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -113,16 +112,16 @@ public class IngredientEntryService {
                 .toList();
     }
 
-    public IngredientEntry details(String id, String userId) throws ObjectNotFoundException {
+    public IngredientEntry details(String id, String userId) throws OperationForbiddenException {
         Optional<IngredientEntry> optionalIngredientEntry = ingredientEntryRepository.findByIdentifier(id);
         if (optionalIngredientEntry.isEmpty()) {
-            throw new ObjectNotFoundException(id);
+            throw new OperationForbiddenException("Объект не найден.");
             } else {
             String workspaceId = optionalIngredientEntry.get().getWorkspaceId();
 
             List<Role> roles = authorizationService.getRoles(userId, workspaceId);
             if (!roles.contains(Role.ADMINISTRATOR) && !roles.contains(Role.OWNER)) {
-                throw new ObjectNotFoundException("Пользовтель с таким уровнем доступа не может просматривать детали записи справочника ингредиентов.");
+                throw new OperationForbiddenException("Пользовтель с таким уровнем доступа не может просматривать детали записи справочника ингредиентов.");
             }
             return optionalIngredientEntry.get();
             }
