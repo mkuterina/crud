@@ -46,7 +46,7 @@ public class IngredientEntryService {
     }
 
     public boolean rename(String id, String newName, String newDescription, String userId)
-            throws IngredientEntryNotFoundException {
+            throws IngredientEntryNotFoundException, OperationForbiddenException {
 
         Optional<IngredientEntry> optionalIngredientEntry = ingredientEntryRepository
                 .findByIdentifier(id);
@@ -63,7 +63,7 @@ public class IngredientEntryService {
 
             List<Role> roles = authorizationService.getRoles(userId, workspaceId);
             if (!roles.contains(Role.ADMINISTRATOR) && !roles.contains(Role.OWNER)) {
-                throw new IngredientEntryNotFoundException("Пользовтель с таким уровнем доступа не может изменять название записи справочника ингредиентов.");
+                throw new OperationForbiddenException("Пользовтель с таким уровнем доступа не может изменять название записи справочника ингредиентов.");
             }
             ingredientEntryRepository.save(ingredientEntry);
             return result;
@@ -112,10 +112,10 @@ public class IngredientEntryService {
                 .toList();
     }
 
-    public IngredientEntry details(String id, String userId) throws OperationForbiddenException {
+    public IngredientEntry details(String id, String userId) throws OperationForbiddenException, IngredientEntryNotFoundException {
         Optional<IngredientEntry> optionalIngredientEntry = ingredientEntryRepository.findByIdentifier(id);
         if (optionalIngredientEntry.isEmpty()) {
-            throw new OperationForbiddenException("Объект не найден.");
+            throw new IngredientEntryNotFoundException(id);
             } else {
             String workspaceId = optionalIngredientEntry.get().getWorkspaceId();
 
@@ -124,7 +124,7 @@ public class IngredientEntryService {
                 throw new OperationForbiddenException("Пользовтель с таким уровнем доступа не может просматривать детали записи справочника ингредиентов.");
             }
             return optionalIngredientEntry.get();
-            }
         }
+    }
 }
 
