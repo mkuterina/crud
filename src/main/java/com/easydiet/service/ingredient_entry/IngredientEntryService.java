@@ -4,7 +4,6 @@ import com.easydiet.domain.OperationForbiddenException;
 import com.easydiet.domain.authorization_service.AuthorizationService;
 import com.easydiet.domain.authorization_service.Role;
 import com.easydiet.domain.directory.Directory;
-import com.easydiet.domain.directory.DirectoryId;
 import com.easydiet.domain.directory.DirectoryRepository;
 import com.easydiet.domain.ingredient_entry.*;
 import com.sun.istack.NotNull;
@@ -37,7 +36,7 @@ public class IngredientEntryService {
         }
         return ingredientEntryRepository.saveAndFlush(
                 IngredientEntry.create(
-                        DirectoryId.create(directoryId),
+                        directoryId,
                         IngredientEntryName.create(name),
                         IngredientEntryDescription.create(description),
                         workspaceId

@@ -46,12 +46,16 @@ public class GroupEntry {
     @Convert(converter = EntityStatusConverter.class)
     private EntityStatus status;
 
+    @Column(name = "workspace_id")
+    private String workspaceId;
+
 
     public static GroupEntry create(
             String directoryId,
             GroupEntryName name,
             GroupEntryType type,
-            GroupEntryDescription description
+            GroupEntryDescription description,
+            String workspaceId
     ) {
          if (name == null) {
             throw new IllegalStateException("Имя ингридиента должно быть задано");
@@ -64,7 +68,8 @@ public class GroupEntry {
                 description,
                 LocalDateTime.now(),
                 null,
-                EntityStatus.ENABLED
+                EntityStatus.ENABLED,
+                workspaceId
         );
     }
 

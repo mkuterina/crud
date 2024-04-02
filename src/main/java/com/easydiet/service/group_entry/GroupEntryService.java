@@ -72,8 +72,7 @@ public class GroupEntryService {
         if (optionalGroupEntry.isEmpty()) {
             throw new IllegalStateException();
         }
-        GroupEntry ge = optionalGroupEntry.get();
-        return ge;
+        return optionalGroupEntry.get();
     }
 }
 

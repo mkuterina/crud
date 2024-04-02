@@ -1,31 +1,44 @@
 package com.easydiet.service.recipe_entry;
 
-import com.easydiet.domain.directory.DirectoryId;
+import com.easydiet.domain.OperationForbiddenException;
+import com.easydiet.domain.authorization_service.AuthorizationService;
+import com.easydiet.domain.authorization_service.Role;
+import com.easydiet.domain.directory.Directory;
+import com.easydiet.domain.directory.DirectoryRepository;
 import com.easydiet.domain.recipe_entry.*;
 import com.sun.istack.NotNull;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class RecipeEntryService {
     private final RecipeEntryRepository recipeEntryRepository;
-
-    @Autowired
-    public RecipeEntryService(RecipeEntryRepository recipeEntryRepository) {
-        this.recipeEntryRepository = recipeEntryRepository;
-
-    }
+    private final DirectoryRepository directoryRepository;
+    private final AuthorizationService authorizationService;
 
     @NotNull
-    public RecipeEntry create(String directoryId, String name, String content) {
+    public RecipeEntry create(String directoryId, String name, String content, String userId)
+    throws OperationForbiddenException {
+        Optional<Directory> optionalDirectory = directoryRepository.findByIdentifier(directoryId);
+        if (optionalDirectory.isEmpty()) {
+            throw new OperationForbiddenException("Справочник с таким идентификатором не найден.");
+        }
+        String workspaceId = optionalDirectory.get().getWorkspaceId();
+
+        List<Role> roles = authorizationService.getRoles(userId, workspaceId);
+        if (!roles.contains(Role.ADMINISTRATOR) && !roles.contains(Role.OWNER)) {
+            throw new OperationForbiddenException("Пользовтель с таким уровнем доступа не может создать новую запись справочника ингредиентов.");
+        }
         return recipeEntryRepository.saveAndFlush(
-                RecipeEntryOperations.create(
-                        DirectoryId.create(directoryId),
+                RecipeEntry.create(
+                        directoryId,
                         RecipeEntryName.create(name),
-                        RecipeEntryContent.create(content)
+                        RecipeEntryContent.create(content),
+                        workspaceId
                 )
         );
     }

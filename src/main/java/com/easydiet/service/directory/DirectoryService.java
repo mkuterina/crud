@@ -19,7 +19,8 @@ public class DirectoryService {
     private final AuthorizationService authorizationService;
 
       @NotNull
-    public Directory create(String name, String type, String description, String userId, String workspaceId) throws OperationForbiddenException {
+    public Directory create(String name, String type, String description, String userId, String workspaceId)
+              throws OperationForbiddenException {
         Optional<Directory> optionalDirectory = directoryRepository.findByName(name);
         if (optionalDirectory.isPresent()) {
             throw new OperationForbiddenException("Справочник с таким именем уже существует.");

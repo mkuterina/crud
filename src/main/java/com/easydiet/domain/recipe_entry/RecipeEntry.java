@@ -2,14 +2,21 @@ package com.easydiet.domain.recipe_entry;
 
 import com.easydiet.domain.EntityStatus;
 import com.easydiet.domain.EntityStatusConverter;
-import com.easydiet.domain.directory.DirectoryId;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import java.lang.String;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
+@ToString
 @Entity
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "recipe_entry")
 public class RecipeEntry {
 
@@ -20,12 +27,6 @@ public class RecipeEntry {
     @Column(name = "id")
     private String id;
 
-    @Column(name = "create_date")
-    private LocalDateTime createDate;
-
-    @Column(name = "delete_date")
-    private LocalDateTime deleteDate;
-
     @Column(name = "recipe_name")
     @Convert(converter = RecipeEntryNameConverter.class)
     private RecipeEntryName name;
@@ -34,62 +35,53 @@ public class RecipeEntry {
     @Convert(converter = RecipeEntryContentConverter.class)
     private RecipeEntryContent content;
 
+    @Column(name = "create_date")
+    private LocalDateTime createDate;
+
+    @Getter
+    @Column(name = "delete_date")
+    private LocalDateTime deleteDate;
+
     @Column(name = "recipe_status")
     @Convert(converter = EntityStatusConverter.class)
     private EntityStatus status;
 
-    public RecipeEntry() {
-    }
+    @Column(name = "workspace_id")
+    private String workspaceId;
 
 
-    public String getDirectoryId() {
-        return directoryId;
-    }
-
-    public RecipeEntryId getId() {
-        return RecipeEntryId.create(id);
-    }
-
-    public LocalDateTime getCreateDate() {
-        return createDate;
-    }
-
-    public LocalDateTime getDeleteDate() {
-        return deleteDate;
-    }
-
-    public RecipeEntryName getName() {
-        return name;
-    }
-
-    public RecipeEntryContent getContent() {
-        return content;
-    }
-
-    public EntityStatus getStatus() {
-        return status;
-    }
-
-    //
-    // IngredientOperations Support
-    //
-
-    public RecipeEntry(DirectoryId directoryId,
-                       RecipeEntryId id,
-                       LocalDateTime createDate,
-                       RecipeEntryName name,
-                       String content, EntityStatus status) {
-        this.directoryId = directoryId.getDirectoryId();
-        this.id = id.getId();
-        this.createDate = createDate;
-        this.name = name;
-        this.content = RecipeEntryContent.create(content);
-        this.status = EntityStatus.ENABLED;
+    public static RecipeEntry create(
+            String directoryId,
+            RecipeEntryName name,
+            RecipeEntryContent content,
+            String workspaceId) {
+        if (name == null) {
+            throw new IllegalStateException("Название рецепта должно быть задано.");
+        }
+        return new RecipeEntry(
+                directoryId,
+                RecipeEntryId.create().getId(),
+                name,
+                content,
+                LocalDateTime.now(),
+                null,
+                EntityStatus.ENABLED,
+                workspaceId
+        );
     }
 
     //
     // Domain Logic
     //
+    public boolean delete() {
+        if (deleteDate != null) {
+            return false;
+        } else {
+            this.deleteDate = LocalDateTime.now();
+            return true;
+        }
+    }
+
     public boolean isDeleted() {
         return deleteDate != null;
     }
@@ -112,14 +104,4 @@ public class RecipeEntry {
             return true;
         }
     }
-
-    public boolean delete() {
-        if (deleteDate != null) {
-            return false;
-        } else {
-            this.deleteDate = LocalDateTime.now();
-            return true;
-        }
-    }
 }
-
