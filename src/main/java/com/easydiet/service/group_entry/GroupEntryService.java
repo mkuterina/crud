@@ -1,5 +1,10 @@
 package com.easydiet.service.group_entry;
 
+import com.easydiet.domain.OperationForbiddenException;
+import com.easydiet.domain.authorization_service.AuthorizationService;
+import com.easydiet.domain.authorization_service.Role;
+import com.easydiet.domain.directory.Directory;
+import com.easydiet.domain.directory.DirectoryRepository;
 import com.easydiet.domain.group_entry.*;
 import lombok.AllArgsConstructor;
 
@@ -14,16 +19,29 @@ import java.util.Optional;
 public class GroupEntryService {
 
     private final GroupEntryRepository groupEntryRepository;
+    private final DirectoryRepository directoryRepository;
+    private final AuthorizationService authorizationService;
 
     @NotNull
-    public GroupEntry create(String directoryId, String name, String type, String description) {
+    public GroupEntry create(String directoryId, String name, String type, String description, String userId)
+    throws OperationForbiddenException {
+        Optional<Directory> optionalDirectory = directoryRepository.findByIdentifier(directoryId);
+        if (optionalDirectory.isEmpty()) {
+            throw new OperationForbiddenException("Справочник с таким идентификатором не найден.");
+        }
+        String workspaceId = optionalDirectory.get().getWorkspaceId();
+
+        List<Role> roles = authorizationService.getRoles(userId, workspaceId);
+        if (!roles.contains(Role.ADMINISTRATOR) && !roles.contains(Role.OWNER)) {
+            throw new OperationForbiddenException("Пользовтель с таким уровнем доступа не может создать новую запись справочника ингредиентов.");
+        }
         GroupEntry result = GroupEntry.create(
                 directoryId,
                 GroupEntryName.create(name),
                 GroupEntryType.create(type),
-                GroupEntryDescription.create(description)
+                GroupEntryDescription.create(description),
+                workspaceId
         );
-
         groupEntryRepository.saveAndFlush(result);
         return result;
     }
