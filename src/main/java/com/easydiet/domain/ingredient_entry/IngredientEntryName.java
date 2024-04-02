@@ -1,23 +1,20 @@
 package com.easydiet.domain.ingredient_entry;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
+@Getter
+@AllArgsConstructor
 public class IngredientEntryName {
     private static final int MAX_LENGTH = 100;
     private final String name;
 
-    private IngredientEntryName(String name) {
-        this.name = name;
-    }
-
-    @Override
+       @Override
     public String toString() {
         return "IngredientEntryName(" + name + ")";
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public static IngredientEntryName create(String name) {
+       public static IngredientEntryName create(String name) {
         if (name == null || name.isBlank()) {
             throw new IllegalStateException("Имя ингридиента не может быть пустым");
         }

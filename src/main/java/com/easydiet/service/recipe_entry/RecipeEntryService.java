@@ -43,8 +43,8 @@ public class RecipeEntryService {
         );
     }
 
-    public boolean rename(String id, String newName, String newContent)
-            throws RecipeEntryNotFoundException {
+    public boolean rename(String id, String newName, String newContent, String userId)
+            throws RecipeEntryNotFoundException, OperationForbiddenException {
         Optional<RecipeEntry> optionalRecipeEntry = recipeEntryRepository.findByIdentifier(id);
 
         if (optionalRecipeEntry.isEmpty()) {
@@ -52,7 +52,16 @@ public class RecipeEntryService {
         }
         else {
             RecipeEntry recipeEntry = optionalRecipeEntry.get();
-            boolean result = recipeEntry.rename(RecipeEntryName.create(newName), RecipeEntryContent.create(newContent));
+            boolean result = recipeEntry.rename(
+                    RecipeEntryName.create(newName),
+                    RecipeEntryContent.create(newContent)
+            );
+            String workspaceId = optionalRecipeEntry.get().getWorkspaceId();
+
+            List<Role> roles = authorizationService.getRoles(userId, workspaceId);
+            if (!roles.contains(Role.ADMINISTRATOR) && !roles.contains(Role.OWNER)) {
+                throw new OperationForbiddenException("Пользовтель с таким уровнем доступа не может изменять название записи справочника рецептов.");
+            }
             recipeEntryRepository.save(recipeEntry);
             return result;
         }
