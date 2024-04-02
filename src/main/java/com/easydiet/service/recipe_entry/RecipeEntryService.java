@@ -10,6 +10,7 @@ import com.sun.istack.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -31,7 +32,7 @@ public class RecipeEntryService {
 
         List<Role> roles = authorizationService.getRoles(userId, workspaceId);
         if (!roles.contains(Role.ADMINISTRATOR) && !roles.contains(Role.OWNER)) {
-            throw new OperationForbiddenException("Пользовтель с таким уровнем доступа не может создать новую запись справочника ингредиентов.");
+            throw new OperationForbiddenException("Пользовтель с таким уровнем доступа не может создать новую запись справочника рецептов.");
         }
         return recipeEntryRepository.saveAndFlush(
                 RecipeEntry.create(
@@ -67,7 +68,7 @@ public class RecipeEntryService {
         }
     }
 
-    public boolean delete(String id) {
+    public boolean delete(String id, String userId) throws  OperationForbiddenException {
         Optional<RecipeEntry> optionalRecipeEntry = recipeEntryRepository
                 .findByIdentifier(id);
         if (optionalRecipeEntry.isEmpty()) {
@@ -76,30 +77,52 @@ public class RecipeEntryService {
         else {
             RecipeEntry recipeEntry = optionalRecipeEntry.get();
             boolean result = recipeEntry.delete();
+            String workspaceId = optionalRecipeEntry.get().getWorkspaceId();
+
+            List<Role> roles = authorizationService.getRoles(userId, workspaceId);
+            if (!roles.contains(Role.ADMINISTRATOR) && !roles.contains(Role.OWNER)) {
+                throw new OperationForbiddenException("Пользовтель с таким уровнем доступа не может удалить запись справочника рецептов.");
+            }
             recipeEntryRepository.save(recipeEntry);
             return result;
         }
     }
 
-    public List<RecipeEntry> list() {
-        return recipeEntryRepository.listAll().stream()
-                .filter(recipeEntry -> !recipeEntry.isDeleted())
-                .toList();
-    }
-
-    public RecipeEntry details(String id) throws RecipeEntryNotFoundException {
-        Optional<RecipeEntry> optionalRecipeEntry = recipeEntryRepository.findByIdentifier(id);
-        if (optionalRecipeEntry.isEmpty()) {
-            throw new RecipeEntryNotFoundException(id);
-        } else {
-            return optionalRecipeEntry.get();
+    public List<RecipeEntry> list(String directoryId, String userId) throws OperationForbiddenException {
+            Optional<Directory> optionalDirectory = directoryRepository.findByIdentifier(directoryId);
+        if (optionalDirectory.isEmpty()) {
+            throw new OperationForbiddenException("Справочник с таким идентификатором не найден.");
         }
-    }
-    
-     public List<RecipeEntry> list(String directoryId) {
+        String workspaceId = optionalDirectory.get().getWorkspaceId();
+        List<Role> roles = authorizationService.getRoles(userId, workspaceId);
+        if (!roles.contains(Role.ADMINISTRATOR) && !roles.contains(Role.OWNER)) {
+            throw new OperationForbiddenException("Пользовтель с таким уровнем доступа не может просматривать список рецептов в справочнике.");
+        }
+        Collection<RecipeEntry> recipeEntries = recipeEntryRepository.listAllByDirectoryId(directoryId);
+        if (recipeEntries.isEmpty()) {
+            throw new OperationForbiddenException("Справочник пуст.");
+        }
+
         return recipeEntryRepository.listAllByDirectoryId(directoryId).stream()
                 .filter(RecipeEntry -> !RecipeEntry.isDeleted())
                 .toList();
     }
+
+    public RecipeEntry details(String id, String userId) throws OperationForbiddenException, RecipeEntryNotFoundException {
+        Optional<RecipeEntry> optionalRecipeEntry = recipeEntryRepository.findByIdentifier(id);
+        if (optionalRecipeEntry.isEmpty()) {
+            throw new RecipeEntryNotFoundException(id);
+        } else {
+            String workspaceId = optionalRecipeEntry.get().getWorkspaceId();
+
+            List<Role> roles = authorizationService.getRoles(userId, workspaceId);
+            if (!roles.contains(Role.ADMINISTRATOR) && !roles.contains(Role.OWNER)) {
+                throw new OperationForbiddenException("Пользовтель с таким уровнем доступа не может просматривать детали записи справочника рецептов.");
+            }
+            return optionalRecipeEntry.get();
+        }
+    }
+    
+
 
 }
