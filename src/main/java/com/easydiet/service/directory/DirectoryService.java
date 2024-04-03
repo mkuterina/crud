@@ -28,7 +28,8 @@ public class DirectoryService {
 
         List<Role> roles = authorizationService.getRoles(userId, workspaceId);
         if (!roles.contains(Role.ADMINISTRATOR) && !roles.contains(Role.OWNER)) {
-            throw new OperationForbiddenException("Пользователь с таким уровнем доступа не может создать новый справочник.");
+            throw new OperationForbiddenException(
+                    "Пользователь с таким уровнем доступа не может создать новый справочник.");
         }
         return directoryRepository.save(
                 Directory.create(
@@ -58,12 +59,14 @@ public class DirectoryService {
 
             List<Role> roles = authorizationService.getRoles(userId, workspaceId);
             if (!roles.contains(Role.ADMINISTRATOR) && !roles.contains(Role.OWNER)) {
-                throw new OperationForbiddenException("Пользовтель с таким уровнем доступа не может изменять название справочника.");
+                throw new OperationForbiddenException(
+                        "Пользовтель с таким уровнем доступа не может изменять название справочника.");
             }
             directoryRepository.save(directory);
             return result;
         }
     }
+
     public boolean delete(String directoryId, String userId) throws  OperationForbiddenException {
         Optional<Directory> optionalDirectory = directoryRepository.findByIdentifier(directoryId);
         if (optionalDirectory.isEmpty()) {
@@ -77,29 +80,30 @@ public class DirectoryService {
 
             List<Role> roles = authorizationService.getRoles(userId, workspaceId);
             if (!roles.contains(Role.ADMINISTRATOR) && !roles.contains(Role.OWNER)) {
-                throw new OperationForbiddenException("Пользовтель с таким уровнем доступа не может удалить справочник.");
+                throw new OperationForbiddenException(
+                        "Пользовтель с таким уровнем доступа не может удалить справочник.");
             }
             directoryRepository.save(directory);
             return result;
         }
     }
+
     //TODO: Посмотреть метод list
-    public List<Directory> list(String userId) throws OperationForbiddenException {
-        List<Directory> directoryList = directoryRepository.listAll();
-        if (directoryList.isEmpty()) {
-            throw new OperationForbiddenException("Список справочников пуст.");
-        }
-        String workspaceId = directoryList.get(0).getWorkspaceId();
+    public List<Directory> list(String userId, String workspaceId) throws OperationForbiddenException {
+
         List<Role> roles = authorizationService.getRoles(userId, workspaceId);
         if (!roles.contains(Role.ADMINISTRATOR) && !roles.contains(Role.OWNER)) {
-            throw new OperationForbiddenException("Пользовтель с таким уровнем доступа не может просматривать список ингредиентов в справочнике.");
+            throw new OperationForbiddenException(
+                    "Пользовтель с таким уровнем доступа не может просматривать список справочников.");
         }
-        return directoryRepository.listAll().stream()
+
+        return directoryRepository.listAll(workspaceId).stream()
                 .filter(directory -> !directory.isDeleted())
                 .toList();
     }
 
-    public Directory details(String directoryId, String userId) throws DirectoryNotFoundException, OperationForbiddenException {
+    public Directory details(String directoryId, String userId) throws DirectoryNotFoundException,
+            OperationForbiddenException {
         Optional<Directory> optionalDirectory = directoryRepository.findByIdentifier(directoryId);
         if (optionalDirectory.isEmpty()) {
             throw new DirectoryNotFoundException(directoryId);
@@ -108,7 +112,8 @@ public class DirectoryService {
             String workspaceId = optionalDirectory.get().getWorkspaceId();
             List<Role> roles = authorizationService.getRoles(userId, workspaceId);
             if (!roles.contains(Role.ADMINISTRATOR) && !roles.contains(Role.OWNER)) {
-                throw new OperationForbiddenException("Пользовтель с таким уровнем доступа не может просматривать детали справочника.");
+                throw new OperationForbiddenException(
+                        "Пользовтель с таким уровнем доступа не может просматривать детали справочника.");
             }
             return optionalDirectory.get();
         }
