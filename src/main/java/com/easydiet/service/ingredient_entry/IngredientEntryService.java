@@ -100,12 +100,10 @@ public class IngredientEntryService {
         if (!roles.contains(Role.ADMINISTRATOR) && !roles.contains(Role.OWNER)) {
             throw new OperationForbiddenException("Пользовтель с таким уровнем доступа не может просматривать список ингредиентов в справочнике.");
         }
-
         Collection<IngredientEntry> ingredientEntries = ingredientEntryRepository.listAllByDirectoryId(directoryId);
         if (ingredientEntries.isEmpty()) {
             throw new OperationForbiddenException("Справочник пуст.");
         }
-
         return ingredientEntryRepository.listAllByDirectoryId(directoryId).stream()
                 .filter(IngredientEntry -> !IngredientEntry.isDeleted())
                 .toList();

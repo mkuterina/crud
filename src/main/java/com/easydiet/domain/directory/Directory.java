@@ -2,6 +2,7 @@ package com.easydiet.domain.directory;
 
 import com.easydiet.domain.EntityStatus;
 import com.easydiet.domain.EntityStatusConverter;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
@@ -14,6 +15,7 @@ import java.time.LocalDateTime;
 @Entity
 @Getter
 @NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "directory")
 public class Directory {
 
@@ -43,24 +45,32 @@ public class Directory {
         @Column(name = "workspace_id")
         private String workspaceId;
 
-
-    //
-    // DirectoryOperations Support
-    //
-
-    protected Directory(DirectoryId directoryId, DirectoryName name, DirectoryType type, DirectoryDescription description, LocalDateTime createDate, String workspaceId) {
-        this.directoryId = directoryId.getDirectoryId();
-        this.name = name.getName();
-        this.type = type.getType();
-        this.description = description.getDescription();
-        this.createDate = createDate;
-        this.status = EntityStatus.ENABLED;
-        this.workspaceId = getWorkspaceId();
+     public static Directory create(String name,
+                                   String type,
+                                   String description,
+                                   String workspaceId) {
+        if (name == null) {
+            throw new IllegalStateException("Имя справочника должно быть задано.");
+        }
+        return new Directory(
+                DirectoryId.create().getDirectoryId(),
+                name,
+                type,
+                description,
+                LocalDateTime.now(),
+                null,
+                EntityStatus.ENABLED,
+                workspaceId);
     }
-
-    //
-    // Domain Logic
-    //
+    public boolean delete() {
+        if (deleteDate != null) {
+            return false;
+        }
+        else {
+            this.deleteDate = LocalDateTime.now();
+            return true;
+        }
+    }
 
     public boolean isDeleted() {
         return deleteDate != null;
@@ -68,9 +78,14 @@ public class Directory {
 
     public boolean rename(DirectoryName newName, DirectoryType type, DirectoryDescription description) {
         if (newName == null) {
-            throw new IllegalStateException("Имя справочника должно быть задано");
+            throw new IllegalStateException("Имя справочника должно быть задано.");
         }
-
+        if (type == null) {
+            throw new IllegalStateException("Тип справочника должен быть задан.");
+        }
+        if (description == null) {
+            throw new IllegalStateException("Описание справочника должно быть задано.");
+        }
         if (deleteDate != null) {
             return false;
         }
@@ -79,16 +94,6 @@ public class Directory {
         }
         else {
             this.name = newName.getName();
-            return true;
-        }
-    }
-
-    public boolean delete() {
-        if (deleteDate != null) {
-            return false;
-        }
-        else {
-            this.deleteDate = LocalDateTime.now();
             return true;
         }
     }

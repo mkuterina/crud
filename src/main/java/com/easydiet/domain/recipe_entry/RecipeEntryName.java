@@ -1,10 +1,13 @@
 package com.easydiet.domain.recipe_entry;
 
+import lombok.Getter;
+
+@Getter
 public class RecipeEntryName {
     private static final int MAX_LENGTH = 200;
     private final String name;
 
-    public RecipeEntryName(String name) {
+    private RecipeEntryName(String name) {
         this.name = name;
     }
 
@@ -13,10 +16,7 @@ public class RecipeEntryName {
         return "RecipeEntryName(" + name + ")";
     }
 
-    public String getName() {
-        return name;
-    }
-    public static RecipeEntryName create(String name) {
+       public static RecipeEntryName create(String name) {
         if (name == null || name.isBlank()) {
             throw new IllegalStateException("Название рецепта не может быть пустым.");
         }

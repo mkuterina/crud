@@ -11,6 +11,7 @@ import lombok.AllArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -46,8 +47,9 @@ public class GroupEntryService {
         return result;
     }
 
-    public boolean rename(String id, String newName)
-            throws GroupEntryNotFoundException {
+    public boolean rename(String id, String newName, String userId)
+            throws GroupEntryNotFoundException, OperationForbiddenException {
+
         Optional<GroupEntry> optionalGroupEntry = groupEntryRepository.findByIdentifier(id);
         if (optionalGroupEntry.isEmpty()) {
             throw new GroupEntryNotFoundException((id));
@@ -56,39 +58,68 @@ public class GroupEntryService {
             boolean result = groupEntry.rename(
                     GroupEntryName.create(newName)
             );
+            String workspaceId = optionalGroupEntry.get().getWorkspaceId();
+
+            List<Role> roles = authorizationService.getRoles(userId, workspaceId);
+            if (!roles.contains(Role.ADMINISTRATOR) && !roles.contains(Role.OWNER)) {
+                throw new OperationForbiddenException("Пользовтель с таким уровнем доступа не может изменять название записи справочника групп.");
+            }
             groupEntryRepository.save(groupEntry);
             return result;
         }
     }
 
-    public boolean delete(String id) {
+    public boolean delete(String id, String userId) throws OperationForbiddenException {
         Optional<GroupEntry> optionalGroupEntry = groupEntryRepository.findByIdentifier(id);
         if (optionalGroupEntry.isEmpty()) {
             return false;
         } else {
             GroupEntry groupEntry = optionalGroupEntry.get();
             boolean result = groupEntry.delete();
+            String workspaceId = optionalGroupEntry.get().getWorkspaceId();
+
+            List<Role> roles = authorizationService.getRoles(userId, workspaceId);
+            if (!roles.contains(Role.ADMINISTRATOR) && !roles.contains(Role.OWNER)) {
+                throw new OperationForbiddenException("Пользовтель с таким уровнем доступа не может удалить запись справочника групп.");
+            }
             groupEntryRepository.save(groupEntry);
             return result;
         }
     }
 
-    public List<GroupEntry> list() {
-        return groupEntryRepository.listAll().stream()
-                .filter(GroupEntry -> !GroupEntry.isDeleted())
-                .toList();
-    }
+    public List<GroupEntry> list(String directoryId, String userId) throws OperationForbiddenException {
+        Optional<Directory> optionalDirectory = directoryRepository.findByIdentifier(directoryId);
+        if (optionalDirectory.isEmpty()) {
+            throw new OperationForbiddenException("Справочник с таким идентификатором не найден.");
+        }
 
-    public List<GroupEntry> list(String directoryId) {
+        String workspaceId = optionalDirectory.get().getWorkspaceId();
+
+        List<Role> roles = authorizationService.getRoles(userId, workspaceId);
+        if (!roles.contains(Role.ADMINISTRATOR) && !roles.contains(Role.OWNER)) {
+            throw new OperationForbiddenException("Пользовтель с таким уровнем доступа не может удалить запись справочника групп.");
+        }
+        Collection<GroupEntry> groupEntries = groupEntryRepository.listAllByDirectoryId(directoryId);
+        if (groupEntries.isEmpty()) {
+            throw new OperationForbiddenException("Справочник пуст.");
+        }
+
         return groupEntryRepository.listAllByDirectoryId(directoryId).stream()
                 .filter(GroupEntry -> !GroupEntry.isDeleted())
                 .toList();
     }
 
-    public GroupEntry findById(String id) {
+    public GroupEntry findById(String id, String userId) throws OperationForbiddenException, GroupEntryNotFoundException {
         Optional<GroupEntry> optionalGroupEntry = groupEntryRepository.findById(id);
         if (optionalGroupEntry.isEmpty()) {
-            throw new IllegalStateException();
+            throw new GroupEntryNotFoundException(id);
+        } else {
+            String workspaceId = optionalGroupEntry.get().getWorkspaceId();
+
+            List<Role> roles = authorizationService.getRoles(userId, workspaceId);
+            if (!roles.contains(Role.ADMINISTRATOR) && !roles.contains(Role.OWNER)) {
+                throw new OperationForbiddenException("Пользовтель с таким уровнем доступа не может искать группы по id.");
+            }
         }
         return optionalGroupEntry.get();
     }

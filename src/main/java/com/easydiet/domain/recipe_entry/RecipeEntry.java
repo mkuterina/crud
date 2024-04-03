@@ -70,9 +70,6 @@ public class RecipeEntry {
         );
     }
 
-    //
-    // Domain Logic
-    //
     public boolean delete() {
         if (deleteDate != null) {
             return false;

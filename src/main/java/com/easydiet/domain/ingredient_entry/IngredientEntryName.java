@@ -1,15 +1,18 @@
 package com.easydiet.domain.ingredient_entry;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @Getter
-@AllArgsConstructor
+
 public class IngredientEntryName {
     private static final int MAX_LENGTH = 100;
     private final String name;
 
-       @Override
+    private IngredientEntryName(String name) {
+        this.name = name;
+    }
+
+    @Override
     public String toString() {
         return "IngredientEntryName(" + name + ")";
     }

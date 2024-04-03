@@ -1,5 +1,8 @@
 package com.easydiet.domain.directory;
 
+import lombok.Getter;
+
+@Getter
 public class DirectoryName {
     private static final int MAX_LENGTH = 50;
     private final String name;
@@ -9,9 +12,7 @@ public class DirectoryName {
     public String toString() {
         return "DirectoryName(" + name + ")";
     }
-    public String getName() {
-        return name;
-    }
+
     public static DirectoryName create(String name) {
         if (name == null || name.isBlank()) {
             throw new IllegalStateException("Имя справочника не может быть пустым");
