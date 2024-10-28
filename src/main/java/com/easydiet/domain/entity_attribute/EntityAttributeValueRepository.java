@@ -9,9 +9,6 @@ import java.util.Optional;
 
 public interface EntityAttributeValueRepository extends JpaRepository<EntityAttributeValue, String> {
 
-      @Query("SELECT e FROM EntityAttributeValue e WHERE e.status != 'DISABLED'")
-      List<EntityAttributeValue> listAll();
-
       @Query(value = "select e from EntityAttributeValue e where id = :id and (status = 'ENABLED' or status = 'ENABLED_BY_ID')")
       Optional<EntityAttributeValue> findByIdentifier(@Param("id") String id);
 
@@ -21,4 +18,7 @@ public interface EntityAttributeValueRepository extends JpaRepository<EntityAttr
 
       @Query(value = "select e from EntityAttributeValue e where entityId = :entityId and (status = 'ENABLED' or status = 'ENABLED_IN_LIST')")
       List<EntityAttributeValue> findAllByEntityId(@Param("entityId") String entityId);
+
+      @Query(value = "select e from EntityAttributeValue e where entityId = :entityId and entityType = :entityType and (status = 'ENABLED' or status = 'ENABLED_IN_LIST')")
+      List<EntityAttributeValue> findByEntityIdAndEntityType(@Param("entityId") String entityId, @Param("entityType") String entityType);
 }

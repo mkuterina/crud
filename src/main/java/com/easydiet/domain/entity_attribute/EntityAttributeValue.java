@@ -44,11 +44,15 @@ public class EntityAttributeValue {
     @Convert(converter = EntityStatusConverter.class)
     private EntityStatus status;
 
+    @Column(name = "workspace_id")
+    private String workspaceId;
+
     public static EntityAttributeValue create(
             EntityType entityType,
             String entityId,
             EntityTypeAttribute entityTypeAttributeId,
-            String value
+            String value,
+            String workspaceId
     ) {
         String id = UUID.randomUUID().toString();
         LocalDateTime createDate = LocalDateTime.now();
@@ -61,7 +65,8 @@ public class EntityAttributeValue {
                 value,
                 createDate,
                 null,
-                EntityStatus.ENABLED
+                EntityStatus.ENABLED,
+                workspaceId
         );
     }
     public boolean delete() {

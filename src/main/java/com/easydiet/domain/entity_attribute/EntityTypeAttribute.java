@@ -46,11 +46,15 @@ public class EntityTypeAttribute {
     @Convert(converter = EntityStatusConverter.class)
     private EntityStatus status;
 
+    @Column(name = "workspace_id")
+    private String workspaceId;
+
     public static EntityTypeAttribute create(
             EntityTypeAttributeName name,
             EntityType entityType,
             String attributeType,
-            EntityTypeAttributeDescription description
+            EntityTypeAttributeDescription description,
+            String workspaceId
 ) {
         String id = UUID.randomUUID().toString();
         LocalDateTime createDate = LocalDateTime.now();
@@ -63,7 +67,8 @@ public class EntityTypeAttribute {
                 description,
                 createDate,
                 null,
-                EntityStatus.ENABLED
+                EntityStatus.ENABLED,
+                workspaceId
         );
     }
 
